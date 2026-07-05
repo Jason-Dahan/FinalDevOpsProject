@@ -1,23 +1,10 @@
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mongodb-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-  storageClassName: manual
-  hostPath:
-    path: /tmp/mongodb
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongodb-pvc
 spec:
-  storageClassName: manual
+  # 🚀 Tells EKS Auto Mode to automatically create the PV disk for you
+  storageClassName: ebs-sc
   accessModes:
     - ReadWriteOnce
   resources:
