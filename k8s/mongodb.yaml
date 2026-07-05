@@ -3,8 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mongodb-pvc
 spec:
-  # 🚀 Tells EKS Auto Mode to automatically create the PV disk for you
-  storageClassName: ebs-auto
+  storageClassName: gp2
   accessModes:
     - ReadWriteOnce
   resources:
