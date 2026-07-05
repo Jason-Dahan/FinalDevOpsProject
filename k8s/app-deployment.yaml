@@ -18,7 +18,7 @@ spec:
       - name: namegen-container
         image: namegen:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
         env:
         - name: MONGODB_URL
           value: "mongodb://genuser:password@mongodb/namegen"
