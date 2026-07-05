@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: namegen-app-deployment
+  labels:
+    app: namegen-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: namegen-app
+  template:
+    metadata:
+      labels:
+        app: namegen-app
+    spec:
+      containers:
+      - name: namegen-container
+        image: namegen:latest
+        ports:
+        - containerPort: 3000
