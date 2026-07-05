@@ -46,19 +46,21 @@ jobs:
           # 1. Dynamically swap the image tags
           sed -i "s|namegen:latest|$REGISTRY/$REPOSITORY:$IMAGE_TAG|g" k8s/app-deployment.yaml
           
-          # 2. Refresh the context mapping
+          # 2. Refresh context
           aws eks update-kubeconfig --name devops-project --region us-west-2
           
-          # 3. Production Fix: Wait up to 60 seconds for the cluster API to become responsive
+          # 3. Wait for Cluster API
           echo "Waiting for Kubernetes API authorization to sync..."
           for i in {1..12}; do
             kubectl get nodes && break || sleep 5
           done
-
-          # 4. APPLY THE MONGODB MANIFEST FIRST:
-          kubectl apply -f k8s/mongodb.yaml
           
-          # 4. Apply manifests with standard validation safely enabled
+          # 🚀 4. APPLY THE STATEFUL DB TOPOLOGY IN ORDER:
+          kubectl apply -f k8s/mongodb.yaml
+          kubectl apply -f k8s/mongodb-service.yaml
+          kubectl apply -f k8s/mongodb-statefulset.yaml
+          
+          # 5. Apply app manifests
           kubectl apply -f k8s/app-deployment.yaml
           kubectl apply -f k8s/app-service.yaml
 
