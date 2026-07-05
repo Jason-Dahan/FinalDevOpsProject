@@ -19,3 +19,5 @@ spec:
         image: namegen:latest
         ports:
         - containerPort: 3000
+      nodeSelector:
+        eks.amazonaws.com/compute-type: auto
