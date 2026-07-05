@@ -43,15 +43,21 @@ jobs:
           REPOSITORY: namegen
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Dynamically swap the image tags
+          # 1. Dynamically swap the image tags
           sed -i "s|namegen:latest|$REGISTRY/$REPOSITORY:$IMAGE_TAG|g" k8s/app-deployment.yaml
           
-          # Refresh the authentication tokens right before applying
+          # 2. Refresh the context mapping
           aws eks update-kubeconfig --name devops-project --region us-west-2
           
-          # Apply the manifests, skipping the strict initial OpenAPI validation check if the server is warming up
-          kubectl apply -f k8s/app-deployment.yaml --validate=false
-          kubectl apply -f k8s/app-service.yaml --validate=false
+          # 3. Production Fix: Wait up to 60 seconds for the cluster API to become responsive
+          echo "Waiting for Kubernetes API authorization to sync..."
+          for i in {1..12}; do
+            kubectl get nodes && break || sleep 5
+          done
+          
+          # 4. Apply manifests with standard validation safely enabled
+          kubectl apply -f k8s/app-deployment.yaml
+          kubectl apply -f k8s/app-service.yaml
 
       - name: Print Public App URL Endpoint
         run: |
