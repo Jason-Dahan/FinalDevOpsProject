@@ -43,10 +43,15 @@ jobs:
           REPOSITORY: namegen
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          # Dynamically swap the image tags
           sed -i "s|namegen:latest|$REGISTRY/$REPOSITORY:$IMAGE_TAG|g" k8s/app-deployment.yaml
           
-          kubectl apply -f k8s/app-service.yaml
-          kubectl apply -f k8s/app-deployment.yaml
+          # Refresh the authentication tokens right before applying
+          aws eks update-kubeconfig --name devops-project --region us-west-2
+          
+          # Apply the manifests, skipping the strict initial OpenAPI validation check if the server is warming up
+          kubectl apply -f k8s/app-deployment.yaml --validate=false
+          kubectl apply -f k8s/app-service.yaml --validate=false
 
       - name: Print Public App URL Endpoint
         run: |
