@@ -35,7 +35,7 @@ jobs:
 
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --name auto-mode-cluster --region us-west-2
+          aws eks update-kubeconfig --name devops-project --region us-west-2
 
       - name: Deploy Application Components to EKS
         env:
