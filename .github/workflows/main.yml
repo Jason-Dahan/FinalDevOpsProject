@@ -54,6 +54,9 @@ jobs:
           for i in {1..12}; do
             kubectl get nodes && break || sleep 5
           done
+
+          # 4. APPLY THE MONGODB MANIFEST FIRST:
+          kubectl apply -f k8s/mongodb.yaml
           
           # 4. Apply manifests with standard validation safely enabled
           kubectl apply -f k8s/app-deployment.yaml
