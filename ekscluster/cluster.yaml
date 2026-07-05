@@ -2,7 +2,7 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-    name: auto-mode-cluster
+    name: devops-project
     region: us-west-2
 
 autoModeConfig:
