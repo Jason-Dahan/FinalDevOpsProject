@@ -21,6 +21,6 @@ spec:
         - containerPort: 8080
         env:
           - name: MONGODB_URL
-            value: mongodb://genuser:password@mongodb/namegen
+            value: "mongodb://mongodb:27017/namegen"
       nodeSelector:
         eks.amazonaws.com/compute-type: auto
