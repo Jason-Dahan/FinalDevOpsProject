@@ -3,8 +3,10 @@ kind: Service
 metadata:
   name: namegen-app-service
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    # 🚀 Enforces an AWS Network Load Balancer (NLB) instead of a classic load balancer
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "instance"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
 spec:
   type: LoadBalancer
   ports:
@@ -12,4 +14,5 @@ spec:
       targetPort: 8080
       protocol: TCP
   selector:
+    # 🚀 Fixed to match the exact pod label in your deployment
     app: namegen-app
